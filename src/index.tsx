@@ -1,6 +1,6 @@
+import { ConfigProvider, theme } from 'antd';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { ConfigProvider } from 'antd';
 import App from './App';
 
 const rootEl = document.getElementById('root');
@@ -8,7 +8,11 @@ if (rootEl) {
   const root = ReactDOM.createRoot(rootEl);
   root.render(
     <React.StrictMode>
-      <ConfigProvider>
+      <ConfigProvider
+        theme={{
+          algorithm: theme.darkAlgorithm,
+        }}
+      >
         <App />
       </ConfigProvider>
     </React.StrictMode>,
