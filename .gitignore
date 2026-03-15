@@ -3,6 +3,10 @@
 *.local
 *.log*
 
+# Python
+__pycache__/
+*.pyc
+
 # Dist
 node_modules
 dist/
