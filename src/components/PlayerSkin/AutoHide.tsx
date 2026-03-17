@@ -5,8 +5,15 @@ import ReactjsPlayer from '../ReactjsPlayer';
 export function AutoHide({ children }: { children: React.ReactNode }) {
   const { state } = useContext(ReactjsPlayer.Context);
   const [hidden, setHidden] = useState(false);
-  const shouldShow = state.loading || state.paused || state.ended || state.waiting || state.seeking;
-  const { run: hide, cancel } = useDebounceFn(() => setHidden(true), { wait: 3000 });
+  const shouldShow =
+    state.loading ||
+    state.paused ||
+    state.ended ||
+    state.waiting ||
+    state.seeking;
+  const { run: hide, cancel } = useDebounceFn(() => setHidden(true), {
+    wait: 3000,
+  });
 
   useUpdateEffect(() => {
     if (shouldShow) {

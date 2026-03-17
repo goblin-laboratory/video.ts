@@ -7,11 +7,23 @@ import {
   SoundOutlined,
 } from '@ant-design/icons';
 import { useMemoizedFn } from 'ahooks';
-import { Dropdown, Slider, Space, Tooltip, Typography } from 'antd';
 import type { MenuProps } from 'antd';
+import { Dropdown, Slider, Space, Tooltip, Typography } from 'antd';
 import { useContext, useMemo, useState } from 'react';
-import { formatDuration } from '@/utils/format';
 import ReactjsPlayer from '../ReactjsPlayer';
+
+function formatDuration(ms: number): string {
+  const seconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const remainingSeconds = seconds % 60;
+  const remainingMinutes = minutes % 60;
+
+  if (hours > 0) {
+    return `${hours}:${String(remainingMinutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+  }
+  return `${remainingMinutes}:${String(remainingSeconds).padStart(2, '0')}`;
+}
 
 type PlayerBarProps = {
   actions?: React.ReactNode;
@@ -106,7 +118,12 @@ function PlayerBar({ actions = null, extra = null }: PlayerBarProps) {
 
   const volumePercent = Math.round((state.muted ? 0 : state.volume) * 100);
   const rateItems: MenuProps['items'] = useMemo(
-    () => [0.5, 1, 1.25, 1.5, 2].map((r) => ({ key: String(r), label: `${r}x`, onClick: () => handleRateChange(r) })),
+    () =>
+      [0.5, 1, 1.25, 1.5, 2].map((r) => ({
+        key: String(r),
+        label: `${r}x`,
+        onClick: () => handleRateChange(r),
+      })),
     [handleRateChange],
   );
 
@@ -133,17 +150,23 @@ function PlayerBar({ actions = null, extra = null }: PlayerBarProps) {
             max={Math.max(0, state.duration || 0)}
             step={0.1}
             value={seekingValue ?? (showProgress ? state.currentTime : 0)}
-            onChange={(v: number | [number, number]) => setSeekingValue(Number(v))}
-            onChangeComplete={(v: number | [number, number]) => handleSeekCommit(Number(v))}
+            onChange={(v: number | [number, number]) =>
+              setSeekingValue(Number(v))
+            }
+            onChangeComplete={(v: number | [number, number]) =>
+              handleSeekCommit(Number(v))
+            }
             tooltip={{
-              formatter: (v) => (v == null ? '' : formatDuration(Number(v) * 1000)),
+              formatter: (v) =>
+                v == null ? '' : formatDuration(Number(v) * 1000),
               open: false,
             }}
             disabled={!showProgress}
           />
         </div>
         <Typography.Text style={{ color: '#fff' }}>
-          {formatDuration(currentMs)} / {durationMs > 0 ? formatDuration(durationMs) : '直播'}
+          {formatDuration(currentMs)} /{' '}
+          {durationMs > 0 ? formatDuration(durationMs) : '直播'}
         </Typography.Text>
       </div>
 
@@ -174,7 +197,11 @@ function PlayerBar({ actions = null, extra = null }: PlayerBarProps) {
                 cursor: 'pointer',
               }}
             >
-              {state.paused || state.ended ? <PlayCircleOutlined /> : <PauseCircleOutlined />}
+              {state.paused || state.ended ? (
+                <PlayCircleOutlined />
+              ) : (
+                <PauseCircleOutlined />
+              )}
             </button>
           </Tooltip>
 
@@ -196,7 +223,11 @@ function PlayerBar({ actions = null, extra = null }: PlayerBarProps) {
                   cursor: 'pointer',
                 }}
               >
-                {state.muted || volumePercent === 0 ? <AudioMutedOutlined /> : <SoundOutlined />}
+                {state.muted || volumePercent === 0 ? (
+                  <AudioMutedOutlined />
+                ) : (
+                  <SoundOutlined />
+                )}
               </button>
             </Tooltip>
             <div style={{ width: 100 }}>
@@ -205,7 +236,9 @@ function PlayerBar({ actions = null, extra = null }: PlayerBarProps) {
                 max={100}
                 step={1}
                 value={volumePercent}
-                onChange={(v: number | [number, number]) => handleVolumeChange(Number(v))}
+                onChange={(v: number | [number, number]) =>
+                  handleVolumeChange(Number(v))
+                }
               />
             </div>
           </Space>
@@ -214,7 +247,11 @@ function PlayerBar({ actions = null, extra = null }: PlayerBarProps) {
         </Space>
 
         <Space size={12} align="center">
-          <Dropdown menu={{ items: rateItems }} placement="topRight" trigger={['click']}>
+          <Dropdown
+            menu={{ items: rateItems }}
+            placement="topRight"
+            trigger={['click']}
+          >
             <button
               type="button"
               style={{
@@ -251,7 +288,11 @@ function PlayerBar({ actions = null, extra = null }: PlayerBarProps) {
                 cursor: 'pointer',
               }}
             >
-              {state.fullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+              {state.fullscreen ? (
+                <FullscreenExitOutlined />
+              ) : (
+                <FullscreenOutlined />
+              )}
             </button>
           </Tooltip>
 

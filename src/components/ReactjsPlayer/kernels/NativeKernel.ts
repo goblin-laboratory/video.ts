@@ -14,7 +14,10 @@ class NativeKernel extends Kernel {
   load(props: Record<string, unknown>): Promise<HTMLVideoElement | null> {
     this.clean();
     this.props = props;
-    const { src, video } = this.props as { src: string; video: HTMLVideoElement };
+    const { src, video } = this.props as {
+      src: string;
+      video: HTMLVideoElement;
+    };
     if (!src || !video) {
       this.props = null;
       return Promise.resolve(null);

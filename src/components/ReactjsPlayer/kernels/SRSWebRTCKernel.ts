@@ -7,7 +7,11 @@ class SRSWebRTCKernel extends Kernel {
   load(props: Record<string, unknown>): Promise<SRSPlayer | null> {
     this.clean();
     this.props = props;
-    const { src, config, video } = this.props as { src: string; config: Player.SRSConfig; video: HTMLVideoElement };
+    const { src, config, video } = this.props as {
+      src: string;
+      config: Player.SRSConfig;
+      video: HTMLVideoElement;
+    };
     if (!src || !video) {
       this.props = null;
       return Promise.resolve(null);

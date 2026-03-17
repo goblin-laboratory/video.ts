@@ -8,7 +8,11 @@ class HlsjsKernel extends Kernel {
   load(props: Record<string, unknown>): Promise<Hls | null> {
     this.clean();
     this.props = props;
-    const { src, config, video } = this.props as { src: string; config: HlsConfig; video: HTMLVideoElement };
+    const { src, config, video } = this.props as {
+      src: string;
+      config: HlsConfig;
+      video: HTMLVideoElement;
+    };
     if (!src || !video) {
       this.props = null;
       return Promise.resolve(null);

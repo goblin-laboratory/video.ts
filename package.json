@@ -15,8 +15,11 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@ant-design/icons": "^6.1.0",
     "ahooks": "^3.9.6",
     "antd": "^6.3.2",
+    "antd-style": "^4.1.0",
+    "es-toolkit": "^1.45.1",
     "hls.js": "^1.6.15",
     "mpegts.js": "^1.8.0",
     "react": "^19.2.3",

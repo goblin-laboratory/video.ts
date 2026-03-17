@@ -7,12 +7,19 @@ class MpegtsKernel extends Kernel {
   load(props: Record<string, unknown>): Promise<mpegts.Player | null> {
     this.clean();
     this.props = props;
-    const { src, config, video } = this.props as { src: string; config: mpegts.Config; video: HTMLVideoElement };
+    const { src, config, video } = this.props as {
+      src: string;
+      config: mpegts.Config;
+      video: HTMLVideoElement;
+    };
     if (!src || !video) {
       this.props = null;
       return Promise.resolve(null);
     }
-    const player = mpegts.createPlayer({ isLive: true, type: 'flv', url: src }, config as mpegts.Config);
+    const player = mpegts.createPlayer(
+      { isLive: true, type: 'flv', url: src },
+      config as mpegts.Config,
+    );
     if (!player) {
       return Promise.resolve(null);
     }

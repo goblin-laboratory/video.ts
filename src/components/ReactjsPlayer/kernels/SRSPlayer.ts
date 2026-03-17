@@ -7,7 +7,10 @@ function getHost(url: string) {
   }
 }
 
-function getAPI(url: string, config: { api?: string; protocol?: string; host?: string; pathname?: string }) {
+function getAPI(
+  url: string,
+  config: { api?: string; protocol?: string; host?: string; pathname?: string },
+) {
   if (config.api) {
     return config.api;
   }
@@ -68,7 +71,7 @@ export default class SRSPlayer {
 
     this.url = '';
     this.api = '';
-    // @ts-ignore
+    // @ts-expect-error
     this.stream = null;
     this.trackList = [];
   }
@@ -79,7 +82,7 @@ export default class SRSPlayer {
       bundlePolicy: 'max-bundle',
       rtcpMuxPolicy: 'require',
       iceCandidatePoolSize: 0,
-      // @ts-ignore
+      // @ts-expect-error
       sdpSemantics: 'unified-plan',
       tcpCandidatePolicy: 'disable',
       IceTransportsType: 'nohost',
@@ -122,7 +125,11 @@ export default class SRSPlayer {
       .createOffer()
       .then((offer) => pc.setLocalDescription(offer).then(() => offer))
       .then((offer) => this.getSessionInfo({ sdp: offer.sdp as string }))
-      .then((sdp) => pc.setRemoteDescription(new RTCSessionDescription({ type: 'answer', sdp })));
+      .then((sdp) =>
+        pc.setRemoteDescription(
+          new RTCSessionDescription({ type: 'answer', sdp }),
+        ),
+      );
   }
 
   closeRTCPeerConnection() {
@@ -175,7 +182,12 @@ export default class SRSPlayer {
   }
 
   sendRequest(url: string, opts: any) {
-    return fetch(url, { mode: 'cors', headers: { 'Content-Type': 'application/json' }, method: 'GET', ...opts })
+    return fetch(url, {
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      method: 'GET',
+      ...opts,
+    })
       .then((response) => {
         if (200 <= response.status && 300 > response.status) {
           return response;

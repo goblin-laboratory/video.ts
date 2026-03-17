@@ -9,13 +9,32 @@ import {
   SoundOutlined,
 } from '@ant-design/icons';
 import { useMemoizedFn } from 'ahooks';
-import { Button, Dropdown, Flex, Slider, Space, theme, Tooltip, Typography } from 'antd';
 import type { MenuProps } from 'antd';
+import {
+  Button,
+  Dropdown,
+  Slider,
+  Space,
+  Tooltip,
+  theme,
+} from 'antd';
+import { createStyles, cx } from 'antd-style';
 import { useContext, useMemo, useState } from 'react';
-import { formatDuration } from '@/utils/format';
 import ReactjsPlayer from '../ReactjsPlayer';
 import LiveIndicator from './LiveIndicator';
-import { createStyles, cx } from 'antd-style';
+
+function formatDuration(ms: number): string {
+  const seconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const remainingSeconds = seconds % 60;
+  const remainingMinutes = minutes % 60;
+
+  if (hours > 0) {
+    return `${hours}:${String(remainingMinutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+  }
+  return `${remainingMinutes}:${String(remainingSeconds).padStart(2, '0')}`;
+}
 
 type PlayerBarProps = {
   actions?: React.ReactNode;
@@ -110,7 +129,12 @@ function LivePlayerBar({ actions = null, extra = null }: PlayerBarProps) {
 
   const volumePercent = Math.round((state.muted ? 0 : state.volume) * 100);
   const rateItems: MenuProps['items'] = useMemo(
-    () => [0.5, 1, 1.25, 1.5, 2].map((r) => ({ key: String(r), label: `${r}x`, onClick: () => handleRateChange(r) })),
+    () =>
+      [0.5, 1, 1.25, 1.5, 2].map((r) => ({
+        key: String(r),
+        label: `${r}x`,
+        onClick: () => handleRateChange(r),
+      })),
     [handleRateChange],
   );
 
@@ -122,7 +146,13 @@ function LivePlayerBar({ actions = null, extra = null }: PlayerBarProps) {
       <Space size={token.sizeSM} align="center">
         <TooltipButton
           title={state.paused || state.ended ? '播放' : '暂停'}
-          icon={state.paused || state.ended ? <PlayCircleOutlined /> : <PauseOutlined />}
+          icon={
+            state.paused || state.ended ? (
+              <PlayCircleOutlined />
+            ) : (
+              <PauseOutlined />
+            )
+          }
           onClick={handleTogglePlay}
         />
         {/* <Space size={8} align="center">
@@ -181,15 +211,29 @@ function LivePlayerBar({ actions = null, extra = null }: PlayerBarProps) {
             {state.playbackRate?.toFixed(2)}x
           </button>
         </Dropdown> */}
-        <Dropdown menu={{ items: rateItems }} placement="topRight" trigger={['click']}>
-          <Button type="text" style={{ color: '#fff', fontSize: token.sizeMD }} icon={<SettingOutlined />} />
+        <Dropdown
+          menu={{ items: rateItems }}
+          placement="topRight"
+          trigger={['click']}
+        >
+          <Button
+            type="text"
+            style={{ color: '#fff', fontSize: token.sizeMD }}
+            icon={<SettingOutlined />}
+          />
         </Dropdown>
         <Tooltip title={state.fullscreen ? '退出全屏' : '全屏'}>
           <Button
             type="text"
             style={{ color: '#fff', fontSize: token.sizeMD }}
             onClick={handleToggleFullscreen}
-            icon={state.fullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+            icon={
+              state.fullscreen ? (
+                <FullscreenExitOutlined />
+              ) : (
+                <FullscreenOutlined />
+              )
+            }
           />
         </Tooltip>
       </Space>
@@ -199,7 +243,15 @@ function LivePlayerBar({ actions = null, extra = null }: PlayerBarProps) {
 
 export default LivePlayerBar;
 
-function TooltipButton({ title, icon, onClick }: { title: string; icon: React.ReactNode; onClick: () => void }) {
+function TooltipButton({
+  title,
+  icon,
+  onClick,
+}: {
+  title: string;
+  icon: React.ReactNode;
+  onClick: () => void;
+}) {
   const { token } = theme.useToken();
   return (
     <Tooltip title={title}>

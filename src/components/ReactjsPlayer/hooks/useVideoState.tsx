@@ -1,5 +1,5 @@
 import { useDeepCompareLayoutEffect, useReactive } from 'ahooks';
-import { merge } from 'es-toolkit/compat';
+import { merge } from 'es-toolkit';
 export default useVideoState;
 
 function useVideoState(src?: string) {

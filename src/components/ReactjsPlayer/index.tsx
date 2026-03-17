@@ -3,7 +3,9 @@ import useVideoEvent from './hooks/useVideoEvent';
 import useVideoState from './hooks/useVideoState';
 import { Factory } from './kernels';
 
-const PlayerContext = createContext({} as { videoRef: React.RefObject<HTMLVideoElement>; state: Player.State });
+const PlayerContext = createContext(
+  {} as { videoRef: React.RefObject<HTMLVideoElement>; state: Player.State },
+);
 
 function ReactjsPlayer({
   kernel,
@@ -40,7 +42,9 @@ function ReactjsPlayer({
         }}
       />
       <Factory kernel={kernel} videoRef={videoRef} src={src} config={config} />
-      <PlayerContext.Provider value={{ videoRef, state }}>{children}</PlayerContext.Provider>
+      <PlayerContext.Provider value={{ videoRef, state }}>
+        {children}
+      </PlayerContext.Provider>
     </>
   );
 }

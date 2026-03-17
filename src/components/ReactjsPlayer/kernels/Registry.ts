@@ -19,7 +19,9 @@ class Registry {
 
   private init() {
     this.kernels.clear();
-    [SRSWebRTCKernel, MpegtsKernel, HlsjsKernel, NativeKernel].forEach((it) => this.kernels.set(it.name, it));
+    [SRSWebRTCKernel, MpegtsKernel, HlsjsKernel, NativeKernel].forEach((it) =>
+      this.kernels.set(it.name, it),
+    );
   }
 
   register(kernels: any[]): void {

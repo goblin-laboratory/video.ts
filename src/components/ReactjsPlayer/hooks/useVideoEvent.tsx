@@ -1,7 +1,13 @@
 import { useDeepCompareEffect } from 'ahooks';
 import { startPlay } from './startPlay';
 
-function useVideoEvent({ videoRef, state }: { videoRef: React.RefObject<HTMLVideoElement>; state: Player.State }) {
+function useVideoEvent({
+  videoRef,
+  state,
+}: {
+  videoRef: React.RefObject<HTMLVideoElement>;
+  state: Player.State;
+}) {
   useDeepCompareEffect(() => {
     const el = videoRef.current as HTMLVideoElement;
     if (!el) {
