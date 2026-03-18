@@ -1,14 +1,23 @@
 import {
   AudioMutedOutlined,
+  CaretRightOutlined,
   FullscreenExitOutlined,
   FullscreenOutlined,
-  PauseCircleOutlined,
-  PlayCircleOutlined,
+  PauseOutlined,
   SoundOutlined,
 } from '@ant-design/icons';
 import { useMemoizedFn } from 'ahooks';
 import type { MenuProps } from 'antd';
-import { Dropdown, Slider, Space, Tooltip, Typography } from 'antd';
+import {
+  Button,
+  Dropdown,
+  Slider,
+  Space,
+  Tooltip,
+  Typography,
+  theme,
+} from 'antd';
+import { createStyles } from 'antd-style';
 import { useContext, useMemo, useState } from 'react';
 import ReactjsPlayer from '../ReactjsPlayer';
 
@@ -28,6 +37,13 @@ function formatDuration(ms: number): string {
 type PlayerBarProps = {
   actions?: React.ReactNode;
   extra?: React.ReactNode;
+};
+
+const youtubeSliderStyles = {
+  trackStyle: { backgroundColor: '#FF0000' },
+  handleStyle: { borderColor: '#fff', backgroundColor: '#fff' },
+  activeDotStyle: { borderColor: '#FF0000' },
+  railStyle: { backgroundColor: 'rgba(255,255,255,0.3)' },
 };
 
 function PlaybackPlayerBar({ actions = null, extra = null }: PlayerBarProps) {
@@ -119,23 +135,13 @@ function PlaybackPlayerBar({ actions = null, extra = null }: PlayerBarProps) {
     [handleRateChange],
   );
 
+  const { token } = theme.useToken();
+  const { styles } = useStyles();
+
   return (
-    <div
-      style={{
-        position: 'absolute',
-        left: 0,
-        bottom: 0,
-        width: '100%',
-        padding: '8px 12px',
-        background:
-          'linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.35) 35%, rgba(0,0,0,0.65) 65%, rgba(0,0,0,0.85) 100%)',
-        color: '#fff',
-        boxSizing: 'border-box',
-        userSelect: 'none',
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <div style={{ flex: 1, paddingRight: 8 }}>
+    <div className={styles.playerBar}>
+      <div className={styles.progressRow}>
+        <div className={styles.progressContainer}>
           <Slider
             min={0}
             max={Math.max(0, state.duration || 0)}
@@ -153,47 +159,24 @@ function PlaybackPlayerBar({ actions = null, extra = null }: PlayerBarProps) {
               open: false,
             }}
             disabled={!showProgress}
+            {...youtubeSliderStyles}
           />
         </div>
-        <Typography.Text style={{ color: '#fff' }}>
+        <Typography.Text className={styles.timeText}>
           {formatDuration(currentMs)} /{' '}
           {durationMs > 0 ? formatDuration(durationMs) : '--:--'}
         </Typography.Text>
       </div>
 
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginTop: 6,
-        }}
-      >
-        <Space size={12} align="center">
-          <Tooltip title={state.paused || state.ended ? '播放' : '暂停'}>
-            <button
-              type="button"
-              onClick={handleTogglePlay}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 28,
-                height: 28,
-                borderRadius: 4,
-                border: '0 none',
-                background: 'rgba(255,255,255,0.08)',
-                color: '#fff',
-                cursor: 'pointer',
-              }}
-            >
-              {state.paused || state.ended ? (
-                <PlayCircleOutlined />
-              ) : (
-                <PauseCircleOutlined />
-              )}
-            </button>
-          </Tooltip>
+      <div className={styles.spaceBetween}>
+        <Space size={token.sizeSM} align="center">
+          <TooltipButton
+            title={state.paused || state.ended ? '播放' : '暂停'}
+            icon={
+              state.paused || state.ended ? <CaretRightOutlined /> : <PauseOutlined />
+            }
+            onClick={handleTogglePlay}
+          />
 
           <Space size={8} align="center">
             <Tooltip title={state.muted ? '取消静音' : '静音'}>
@@ -229,6 +212,7 @@ function PlaybackPlayerBar({ actions = null, extra = null }: PlayerBarProps) {
                 onChange={(v: number | [number, number]) =>
                   handleVolumeChange(Number(v))
                 }
+                {...youtubeSliderStyles}
               />
             </div>
           </Space>
@@ -236,55 +220,31 @@ function PlaybackPlayerBar({ actions = null, extra = null }: PlayerBarProps) {
           {actions}
         </Space>
 
-        <Space size={12} align="center">
+        <Space size={0} align="center">
           <Dropdown
             menu={{ items: rateItems }}
             placement="topRight"
             trigger={['click']}
           >
-            <button
-              type="button"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: 28,
-                padding: '0 8px',
-                borderRadius: 4,
-                border: '0 none',
-                background: 'rgba(255,255,255,0.08)',
-                color: '#fff',
-                cursor: 'pointer',
-              }}
+            <Button
+              type="text"
+              style={{ color: '#fff', fontSize: token.sizeMD }}
             >
               {state.playbackRate?.toFixed(2)}x
-            </button>
+            </Button>
           </Dropdown>
 
-          <Tooltip title={state.fullscreen ? '退出全屏' : '全屏'}>
-            <button
-              type="button"
-              onClick={handleToggleFullscreen}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 28,
-                height: 28,
-                borderRadius: 4,
-                border: '0 none',
-                background: 'rgba(255,255,255,0.08)',
-                color: '#fff',
-                cursor: 'pointer',
-              }}
-            >
-              {state.fullscreen ? (
+          <TooltipButton
+            title={state.fullscreen ? '退出全屏' : '全屏'}
+            icon={
+              state.fullscreen ? (
                 <FullscreenExitOutlined />
               ) : (
                 <FullscreenOutlined />
-              )}
-            </button>
-          </Tooltip>
+              )
+            }
+            onClick={handleToggleFullscreen}
+          />
 
           {extra}
         </Space>
@@ -294,3 +254,62 @@ function PlaybackPlayerBar({ actions = null, extra = null }: PlayerBarProps) {
 }
 
 export default PlaybackPlayerBar;
+
+function TooltipButton({
+  title,
+  icon,
+  onClick,
+}: {
+  title: string;
+  icon: React.ReactNode;
+  onClick: () => void;
+}) {
+  const { token } = theme.useToken();
+  return (
+    <Tooltip title={title}>
+      <Button
+        type="text"
+        size="large"
+        icon={icon}
+        onClick={onClick}
+        style={{ color: '#fff', fontSize: token.fontSizeXL }}
+      />
+    </Tooltip>
+  );
+}
+
+const useStyles = createStyles(({ token }) => ({
+  playerBar: {
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    width: '100%',
+    padding: `${token.paddingXS}px ${token.paddingSM}px`,
+    background:
+      'linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.35) 35%, rgba(0,0,0,0.65) 65%, rgba(0,0,0,0.85) 100%)',
+    color: token.colorWhite,
+    fontSize: token.fontSizeLG,
+    backdropFilter: `blur(${token.sizeMD}px)`,
+    boxSizing: 'border-box',
+    userSelect: 'none',
+  },
+  progressRow: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+  },
+  progressContainer: {
+    flex: 1,
+    paddingRight: 8,
+  },
+  timeText: {
+    color: '#fff',
+  },
+  spaceBetween: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 6,
+  },
+}));

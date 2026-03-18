@@ -34,7 +34,7 @@ class SRSWebRTCKernel extends Kernel {
     }
     try {
       player.destroy();
-    } catch (errMsg) {}
+    } catch (_errMsg) {}
     this.player = null;
     this.props = null;
     return Promise.resolve();

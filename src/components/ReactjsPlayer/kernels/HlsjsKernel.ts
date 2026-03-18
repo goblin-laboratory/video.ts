@@ -20,9 +20,7 @@ class HlsjsKernel extends Kernel {
     const player = new Hls(Object.assign({}, config, { debug: false }));
     player.loadSource(src);
     player.attachMedia(video);
-    player.on(Hls.Events.ERROR, (_, info) => {
-      debugger;
-    });
+    player.on(Hls.Events.ERROR, (_, _info) => {});
     this.player = player;
     return Promise.resolve(player);
   }
@@ -34,7 +32,7 @@ class HlsjsKernel extends Kernel {
     if (player) {
       try {
         player.destroy();
-      } catch (errMsg) {}
+      } catch (_errMsg) {}
     }
     return Promise.resolve();
   }

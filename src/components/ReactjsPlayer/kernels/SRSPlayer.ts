@@ -2,7 +2,7 @@ function getHost(url: string) {
   try {
     const u = new URL(url);
     return u.host;
-  } catch (errMsg) {
+  } catch (_errMsg) {
     return global.location.host;
   }
 }
@@ -137,10 +137,10 @@ export default class SRSPlayer {
       this.trackList.forEach((track) => {
         try {
           this.stream.removeTrack(track);
-        } catch (errMsg) {}
+        } catch (_errMsg) {}
         try {
           track.stop();
-        } catch (errMsg) {}
+        } catch (_errMsg) {}
       });
       this.trackList = [];
     }
@@ -155,10 +155,10 @@ export default class SRSPlayer {
 
     try {
       pc.getSenders().forEach((it) => pc.removeTrack(it));
-    } catch (errMsg) {}
+    } catch (_errMsg) {}
     try {
       pc.close();
-    } catch (errMsg) {}
+    } catch (_errMsg) {}
   }
 
   getSessionInfo({ sdp }: { sdp: string }) {
@@ -169,7 +169,7 @@ export default class SRSPlayer {
         sdp,
         streamurl: this.url,
         clientip: null,
-        tid: Number(Math.round(new Date().getTime() * Math.random() * 100))
+        tid: Number(Math.round(Date.now() * Math.random() * 100))
           .toString(16)
           .substr(0, 7),
       }),

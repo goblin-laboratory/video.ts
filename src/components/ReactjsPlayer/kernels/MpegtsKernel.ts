@@ -27,7 +27,6 @@ class MpegtsKernel extends Kernel {
     player.load();
     // player.play();
     player.on(mpegts.Events.ERROR, (type, detail) => {
-      debugger;
       console.error(type, detail);
     });
     this.player = player;
@@ -41,16 +40,16 @@ class MpegtsKernel extends Kernel {
     if (player) {
       try {
         player.pause();
-      } catch (errMsg) {}
+      } catch (_errMsg) {}
       try {
         player.unload();
-      } catch (errMsg) {}
+      } catch (_errMsg) {}
       try {
         player.detachMediaElement();
-      } catch (errMsg) {}
+      } catch (_errMsg) {}
       try {
         player.destroy();
-      } catch (errMsg) {}
+      } catch (_errMsg) {}
     }
     return Promise.resolve();
   }

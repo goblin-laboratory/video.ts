@@ -1,10 +1,10 @@
-import { useCreation, useMemoizedFn } from 'ahooks';
-import { Card, Segmented, Input } from 'antd';
+import { useCreation } from 'ahooks';
+import { Card, Input, Segmented } from 'antd';
 import { createStyles } from 'antd-style';
 import { useState } from 'react';
-import ReactjsPlayer from './components/ReactjsPlayer';
 import { LivePlayerSkin } from './components/PlayerSkin/LivePlayerSkin';
 import { PlaybackPlayerSkin } from './components/PlayerSkin/PlaybackPlayerSkin';
+import ReactjsPlayer from './components/ReactjsPlayer';
 
 const useStyles = createStyles(({ css }) => ({
   appContainer: css`
@@ -173,7 +173,8 @@ interface SourceOption {
 
 const App = () => {
   const { styles } = useStyles();
-  const [selectedOptionId, setSelectedOptionId] = useState<string>('live-native');
+  const [selectedOptionId, setSelectedOptionId] =
+    useState<string>('live-native');
 
   const allOptions = useCreation((): SourceOption[] => {
     return [
@@ -237,7 +238,11 @@ const App = () => {
     <div className={styles.appContainer}>
       <div className={styles.contentWrapper}>
         {/* Control Card */}
-        <Card bordered={false} className={styles.controlCard} bodyStyle={{ padding: 0 }}>
+        <Card
+          bordered={false}
+          className={styles.controlCard}
+          bodyStyle={{ padding: 0 }}
+        >
           <div className={styles.cardBody}>
             <Segmented
               block
@@ -256,17 +261,31 @@ const App = () => {
         </Card>
 
         {/* Player Card */}
-        <Card bordered={false} className={styles.playerCard} bodyStyle={{ padding: 0 }}>
+        <Card
+          bordered={false}
+          className={styles.playerCard}
+          bodyStyle={{ padding: 0 }}
+        >
           <div className={styles.playerWrapper}>
             {selectedOption.url ? (
-              <ReactjsPlayer kernel={selectedOption.kernel} src={selectedOption.url} config={{}}>
-                {selectedOption.mode === 'live' ? <LivePlayerSkin /> : <PlaybackPlayerSkin />}
+              <ReactjsPlayer
+                kernel={selectedOption.kernel}
+                src={selectedOption.url}
+                config={{}}
+              >
+                {selectedOption.mode === 'live' ? (
+                  <LivePlayerSkin />
+                ) : (
+                  <PlaybackPlayerSkin />
+                )}
               </ReactjsPlayer>
             ) : (
               <div className={styles.playerPlaceholder}>
                 <div className={styles.placeholderIcon}>📹</div>
                 <span className={styles.placeholderText}>暂无可用视频源</span>
-                <span className={styles.placeholderSubtext}>请选择其他播放选项</span>
+                <span className={styles.placeholderSubtext}>
+                  请选择其他播放选项
+                </span>
               </div>
             )}
           </div>

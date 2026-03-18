@@ -1,4 +1,5 @@
 import { createContext, useRef } from 'react';
+import useKeyboardShortcuts from './hooks/useKeyboardShortcuts';
 import useVideoEvent from './hooks/useVideoEvent';
 import useVideoState from './hooks/useVideoState';
 import { Factory } from './kernels';
@@ -21,6 +22,7 @@ function ReactjsPlayer({
   const videoRef = useRef<HTMLVideoElement>(null);
   const state = useVideoState(src);
   useVideoEvent({ videoRef, state });
+  useKeyboardShortcuts({ videoRef, enabled: true });
 
   return (
     <>
