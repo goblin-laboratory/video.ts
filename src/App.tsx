@@ -239,9 +239,9 @@ const App = () => {
       <div className={styles.contentWrapper}>
         {/* Control Card */}
         <Card
-          bordered={false}
+          variant="borderless"
           className={styles.controlCard}
-          bodyStyle={{ padding: 0 }}
+          styles={{ body: { padding: 0 } }}
         >
           <div className={styles.cardBody}>
             <Segmented
@@ -262,9 +262,9 @@ const App = () => {
 
         {/* Player Card */}
         <Card
-          bordered={false}
+          variant="borderless"
           className={styles.playerCard}
-          bodyStyle={{ padding: 0 }}
+          styles={{ body: { padding: 0 } }}
         >
           <div className={styles.playerWrapper}>
             {selectedOption.url ? (
