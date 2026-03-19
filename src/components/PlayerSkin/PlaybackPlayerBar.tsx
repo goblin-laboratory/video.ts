@@ -1,10 +1,8 @@
 import {
-  AudioMutedOutlined,
   CaretRightOutlined,
   FullscreenExitOutlined,
   FullscreenOutlined,
   PauseOutlined,
-  SoundOutlined,
 } from '@ant-design/icons';
 import { useMemoizedFn } from 'ahooks';
 import type { MenuProps } from 'antd';
@@ -20,6 +18,7 @@ import {
 import { createStyles } from 'antd-style';
 import { useContext, useMemo, useState } from 'react';
 import ReactjsPlayer from '../ReactjsPlayer';
+import VolumeControl from './VolumeControl';
 
 function formatDuration(ms: number): string {
   const seconds = Math.floor(ms / 1000);
@@ -39,9 +38,9 @@ type PlayerBarProps = {
   extra?: React.ReactNode;
 };
 
-const youtubeSliderStyles = {
+const progressSliderStyles = {
   trackStyle: { backgroundColor: '#FF0000' },
-  handleStyle: { borderColor: '#fff', backgroundColor: '#fff' },
+  handleStyle: { borderColor: '#FF0000', backgroundColor: '#FF0000' },
   activeDotStyle: { borderColor: '#FF0000' },
   railStyle: { backgroundColor: 'rgba(255,255,255,0.3)' },
 };
@@ -68,26 +67,6 @@ function PlaybackPlayerBar({ actions = null, extra = null }: PlayerBarProps) {
       }
     } catch (error) {
       console.error('切换播放状态失败', error);
-    }
-  });
-
-  const handleVolumeChange = useMemoizedFn((value: number) => {
-    try {
-      if (!el) return;
-      const vol = Math.min(1, Math.max(0, value / 100));
-      el.muted = vol === 0;
-      el.volume = vol;
-    } catch (error) {
-      console.error('设置音量失败', error);
-    }
-  });
-
-  const handleToggleMute = useMemoizedFn(() => {
-    try {
-      if (!el) return;
-      el.muted = !el.muted;
-    } catch (error) {
-      console.error('切换静音失败', error);
     }
   });
 
@@ -124,7 +103,6 @@ function PlaybackPlayerBar({ actions = null, extra = null }: PlayerBarProps) {
     }
   });
 
-  const volumePercent = Math.round((state.muted ? 0 : state.volume) * 100);
   const rateItems: MenuProps['items'] = useMemo(
     () =>
       [0.5, 1, 1.25, 1.5, 2].map((r) => ({
@@ -159,13 +137,9 @@ function PlaybackPlayerBar({ actions = null, extra = null }: PlayerBarProps) {
               open: false,
             }}
             disabled={!showProgress}
-            {...youtubeSliderStyles}
+            {...progressSliderStyles}
           />
         </div>
-        <Typography.Text className={styles.timeText}>
-          {formatDuration(currentMs)} /{' '}
-          {durationMs > 0 ? formatDuration(durationMs) : '--:--'}
-        </Typography.Text>
       </div>
 
       <div className={styles.spaceBetween}>
@@ -173,49 +147,21 @@ function PlaybackPlayerBar({ actions = null, extra = null }: PlayerBarProps) {
           <TooltipButton
             title={state.paused || state.ended ? '播放' : '暂停'}
             icon={
-              state.paused || state.ended ? <CaretRightOutlined /> : <PauseOutlined />
+              state.paused || state.ended ? (
+                <CaretRightOutlined />
+              ) : (
+                <PauseOutlined />
+              )
             }
             onClick={handleTogglePlay}
           />
 
-          <Space size={8} align="center">
-            <Tooltip title={state.muted ? '取消静音' : '静音'}>
-              <button
-                type="button"
-                onClick={handleToggleMute}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 28,
-                  height: 28,
-                  borderRadius: 4,
-                  border: '0 none',
-                  background: 'rgba(255,255,255,0.08)',
-                  color: '#fff',
-                  cursor: 'pointer',
-                }}
-              >
-                {state.muted || volumePercent === 0 ? (
-                  <AudioMutedOutlined />
-                ) : (
-                  <SoundOutlined />
-                )}
-              </button>
-            </Tooltip>
-            <div style={{ width: 100 }}>
-              <Slider
-                min={0}
-                max={100}
-                step={1}
-                value={volumePercent}
-                onChange={(v: number | [number, number]) =>
-                  handleVolumeChange(Number(v))
-                }
-                {...youtubeSliderStyles}
-              />
-            </div>
-          </Space>
+          <VolumeControl sliderWidth={100} />
+
+          <Typography.Text className={styles.timeText}>
+            {formatDuration(currentMs)} /{' '}
+            {durationMs > 0 ? formatDuration(durationMs) : '--:--'}
+          </Typography.Text>
 
           {actions}
         </Space>
@@ -228,9 +174,13 @@ function PlaybackPlayerBar({ actions = null, extra = null }: PlayerBarProps) {
           >
             <Button
               type="text"
-              style={{ color: '#fff', fontSize: token.sizeMD }}
+              style={{
+                color: '#fff',
+                fontSize: token.fontSizeLG,
+                fontWeight: 'normal',
+              }}
             >
-              {state.playbackRate?.toFixed(2)}x
+              {state.playbackRate?.toFixed(2).replace(/\.00$/, '')}x
             </Button>
           </Dropdown>
 
@@ -278,18 +228,16 @@ function TooltipButton({
   );
 }
 
-const useStyles = createStyles(({ token }) => ({
+const useStyles = createStyles(({ token, css }) => ({
   playerBar: {
     position: 'absolute',
     left: 0,
     bottom: 0,
     width: '100%',
     padding: `${token.paddingXS}px ${token.paddingSM}px`,
-    background:
-      'linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.35) 35%, rgba(0,0,0,0.65) 65%, rgba(0,0,0,0.85) 100%)',
+    background: 'transparent',
     color: token.colorWhite,
     fontSize: token.fontSizeLG,
-    backdropFilter: `blur(${token.sizeMD}px)`,
     boxSizing: 'border-box',
     userSelect: 'none',
   },
@@ -298,10 +246,14 @@ const useStyles = createStyles(({ token }) => ({
     alignItems: 'center',
     gap: 8,
   },
-  progressContainer: {
-    flex: 1,
-    paddingRight: 8,
-  },
+  progressContainer: css`
+    flex: 1;
+    padding-right: 8px;
+    .ant-slider-handle::after {
+      box-shadow: 0 0 0 2px #FF0000 !important;
+      background-color: #FF0000 !important;
+    }
+  `,
   timeText: {
     color: '#fff',
   },
@@ -310,6 +262,6 @@ const useStyles = createStyles(({ token }) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 6,
+    marginTop: 0,
   },
 }));

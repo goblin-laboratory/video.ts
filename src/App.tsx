@@ -193,18 +193,18 @@ const App = () => {
         url: 'webrtc://localhost/live/livestream',
       },
       {
-        id: 'live-mpegts',
+        id: 'live-flv',
         mode: 'live',
         kernel: 'mpegts',
-        label: '直播 - MPEG-TS',
-        url: '',
+        label: '直播 - FLV',
+        url: 'http://ivt.demo.qulubo.net/flv_srs/quick/5QDVGxXTRI6hxwI1A4s3fQ.flv',
       },
       {
         id: 'live-hlsjs',
         mode: 'live',
         kernel: 'hlsjs',
         label: '直播 - HLS',
-        url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+        url: 'http://ivt.demo.qulubo.net/hls_srs/quick/5QDVGxXTRI6hxwI1A4s3fQ.m3u8',
       },
       {
         id: 'playback-native',

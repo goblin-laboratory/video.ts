@@ -53,8 +53,6 @@ export function AutoHide({ children }: { children: React.ReactNode }) {
         willChange: 'opacity',
         cursor: hidden ? 'none' : 'default',
         background: 'transparent',
-        // 允许内部控件交互
-        // pointerEvents: hidden ? 'none' : 'auto',
       }}
     >
       {children}

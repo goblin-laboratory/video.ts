@@ -1,4 +1,4 @@
-import { PlayCircleOutlined } from '@ant-design/icons';
+import { CaretRightOutlined } from '@ant-design/icons';
 import { useContext } from 'react';
 import ReactjsPlayer from '../ReactjsPlayer';
 import SkinCenter from './SkinCenter';
@@ -25,28 +25,28 @@ export default function CenterPlayButton() {
         type="button"
         onClick={handleClick}
         style={{
-          background: 'rgba(0, 0, 0, 0.5)',
+          background: 'transparent',
           border: 'none',
-          borderRadius: '50%',
-          width: 80,
-          height: 80,
+          borderRadius: 0,
+          width: 'auto',
+          height: 'auto',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
           color: '#fff',
-          transition: 'transform 0.15s ease, background 0.15s ease',
+          textShadow: '0 2px 8px rgba(0, 0, 0, 0.6)',
+          transition: 'transform 0.15s ease',
+          padding: 0,
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'scale(1.1)';
-          e.currentTarget.style.background = 'rgba(0, 0, 0, 0.7)';
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.transform = 'scale(1)';
-          e.currentTarget.style.background = 'rgba(0, 0, 0, 0.5)';
         }}
       >
-        <PlayCircleOutlined style={{ fontSize: 48 }} />
+        <CaretRightOutlined style={{ fontSize: 72, marginLeft: 8 }} />
       </button>
     </SkinCenter>
   );
