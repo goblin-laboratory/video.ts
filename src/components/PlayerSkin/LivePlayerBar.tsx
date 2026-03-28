@@ -5,12 +5,13 @@ import {
   PauseOutlined,
 } from '@ant-design/icons';
 import { useMemoizedFn } from 'ahooks';
-import { Button, Space, Tooltip, theme } from 'antd';
+import { Space, theme } from 'antd';
 import { createStyles, cx } from 'antd-style';
 import { useContext } from 'react';
 import ReactjsPlayer from '../ReactjsPlayer';
 import LiveIndicator from './LiveIndicator';
 import VolumeControl from './VolumeControl';
+import TooltipButton from './TooltipButton';
 
 type PlayerBarProps = {
   actions?: React.ReactNode;
@@ -55,7 +56,7 @@ function LivePlayerBar({ actions = null }: PlayerBarProps) {
 
   return (
     <div className={cx(styles.playerBar, styles.spaceBetween)}>
-      <Space size={token.sizeSM} align="center">
+      <Space size={token.sizeXXS} align="center">
         <TooltipButton
           title={state.paused || state.ended ? '播放' : '暂停'}
           icon={
@@ -92,28 +93,28 @@ function LivePlayerBar({ actions = null }: PlayerBarProps) {
 
 export default LivePlayerBar;
 
-function TooltipButton({
-  title,
-  icon,
-  onClick,
-}: {
-  title: string;
-  icon: React.ReactNode;
-  onClick: () => void;
-}) {
-  const { token } = theme.useToken();
-  return (
-    <Tooltip title={title}>
-      <Button
-        type="text"
-        size="large"
-        icon={icon}
-        onClick={onClick}
-        style={{ color: '#fff', fontSize: token.fontSizeXL }}
-      />
-    </Tooltip>
-  );
-}
+// function TooltipButton({
+//   title,
+//   icon,
+//   onClick,
+// }: {
+//   title: string;
+//   icon: React.ReactNode;
+//   onClick: () => void;
+// }) {
+//   const { token } = theme.useToken();
+//   return (
+//     <Tooltip title={title}>
+//       <Button
+//         type="text"
+//         // size="large"
+//         icon={icon}
+//         onClick={onClick}
+//         style={{ color: '#fff', fontSize: token.fontSizeXL }}
+//       />
+//     </Tooltip>
+//   );
+// }
 
 const useStyles = createStyles(({ token }) => ({
   playerBar: {

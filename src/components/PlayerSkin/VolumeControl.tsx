@@ -45,11 +45,11 @@ export function VolumeControl({ sliderWidth = 100 }: VolumeControlProps) {
   const { styles } = useStyles();
 
   return (
-    <Space size={4} align="center" style={{ display: 'flex' }}>
+    <Space size={2} align="center">
       <Tooltip title={state.muted ? '取消静音' : '静音'}>
         <Button
           type="text"
-          size="large"
+          // size="large"
           icon={
             state.muted || volumePercent === 0 ? (
               <MutedOutlined />

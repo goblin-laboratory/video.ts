@@ -6,19 +6,12 @@ import {
 } from '@ant-design/icons';
 import { useMemoizedFn } from 'ahooks';
 import type { MenuProps } from 'antd';
-import {
-  Button,
-  Dropdown,
-  Slider,
-  Space,
-  Tooltip,
-  Typography,
-  theme,
-} from 'antd';
+import { Button, Dropdown, Slider, Space, Typography, theme } from 'antd';
 import { createStyles } from 'antd-style';
 import { useContext, useMemo, useState } from 'react';
 import ReactjsPlayer from '../ReactjsPlayer';
 import VolumeControl from './VolumeControl';
+import TooltipButton from './TooltipButton';
 
 function formatDuration(ms: number): string {
   const seconds = Math.floor(ms / 1000);
@@ -143,7 +136,7 @@ function PlaybackPlayerBar({ actions = null, extra = null }: PlayerBarProps) {
       </div>
 
       <div className={styles.spaceBetween}>
-        <Space size={token.sizeSM} align="center">
+        <Space size={token.sizeXXS} align="center">
           <TooltipButton
             title={state.paused || state.ended ? '播放' : '暂停'}
             icon={
@@ -166,7 +159,7 @@ function PlaybackPlayerBar({ actions = null, extra = null }: PlayerBarProps) {
           {actions}
         </Space>
 
-        <Space size={0} align="center">
+        <Space size={token.sizeXXS} align="center">
           <Dropdown
             menu={{ items: rateItems }}
             placement="topRight"
@@ -205,28 +198,28 @@ function PlaybackPlayerBar({ actions = null, extra = null }: PlayerBarProps) {
 
 export default PlaybackPlayerBar;
 
-function TooltipButton({
-  title,
-  icon,
-  onClick,
-}: {
-  title: string;
-  icon: React.ReactNode;
-  onClick: () => void;
-}) {
-  const { token } = theme.useToken();
-  return (
-    <Tooltip title={title}>
-      <Button
-        type="text"
-        size="large"
-        icon={icon}
-        onClick={onClick}
-        style={{ color: '#fff', fontSize: token.fontSizeXL }}
-      />
-    </Tooltip>
-  );
-}
+// function TooltipButton({
+//   title,
+//   icon,
+//   onClick,
+// }: {
+//   title: string;
+//   icon: React.ReactNode;
+//   onClick: () => void;
+// }) {
+//   const { token } = theme.useToken();
+//   return (
+//     <Tooltip title={title}>
+//       <Button
+//         type="text"
+//         // size="large"
+//         icon={icon}
+//         onClick={onClick}
+//         style={{ color: '#fff', fontSize: token.fontSizeXL }}
+//       />
+//     </Tooltip>
+//   );
+// }
 
 const useStyles = createStyles(({ token, css }) => ({
   playerBar: {
