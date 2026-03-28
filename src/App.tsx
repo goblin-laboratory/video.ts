@@ -1,7 +1,7 @@
 import { useCreation } from 'ahooks';
 import { Card, Input, Segmented } from 'antd';
 import { createStyles } from 'antd-style';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LivePlayerSkin } from './components/PlayerSkin/LivePlayerSkin';
 import { PlaybackPlayerSkin } from './components/PlayerSkin/PlaybackPlayerSkin';
 import ReactjsPlayer from './components/ReactjsPlayer';
@@ -175,6 +175,8 @@ const App = () => {
   const { styles } = useStyles();
   const [selectedOptionId, setSelectedOptionId] =
     useState<string>('live-native');
+  const [customUrls, setCustomUrls] = useState<Record<string, string>>({});
+  const [inputUrl, setInputUrl] = useState<string>('');
 
   const allOptions = useCreation((): SourceOption[] => {
     return [
@@ -197,14 +199,14 @@ const App = () => {
         mode: 'live',
         kernel: 'mpegts',
         label: '直播 - FLV',
-        url: 'http://ivt.demo.qulubo.net/flv_srs/quick/5QDVGxXTRI6hxwI1A4s3fQ.flv',
+        url: 'https://ivt.demo.qulubo.net/flv_srs/quick/5QDVGxXTRI6hxwI1A4s3fQ.flv',
       },
       {
         id: 'live-hlsjs',
         mode: 'live',
         kernel: 'hlsjs',
         label: '直播 - HLS',
-        url: 'http://ivt.demo.qulubo.net/hls_srs/quick/5QDVGxXTRI6hxwI1A4s3fQ.m3u8',
+        url: 'https://ivt.demo.qulubo.net/hls_srs/quick/5QDVGxXTRI6hxwI1A4s3fQ.m3u8',
       },
       {
         id: 'playback-native',
@@ -224,8 +226,33 @@ const App = () => {
   }, []);
 
   const selectedOption = useCreation(() => {
-    return allOptions.find((o) => o.id === selectedOptionId) || allOptions[0];
-  }, [allOptions, selectedOptionId]);
+    const baseOption =
+      allOptions.find((o) => o.id === selectedOptionId) || allOptions[0];
+    // 如果有自定义 URL，使用自定义 URL
+    if (customUrls[selectedOptionId]) {
+      return {
+        ...baseOption,
+        url: customUrls[selectedOptionId],
+      };
+    }
+    return baseOption;
+  }, [allOptions, selectedOptionId, customUrls]);
+
+  // 切换选项时更新输入框内容
+  useEffect(() => {
+    setInputUrl(selectedOption.url);
+  }, [selectedOption.url]);
+
+  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputUrl(e.target.value);
+  };
+
+  const handleUrlPressEnter = () => {
+    setCustomUrls((prev) => ({
+      ...prev,
+      [selectedOptionId]: inputUrl,
+    }));
+  };
 
   const segmentOptions = useCreation(() => {
     return allOptions.map((opt) => ({
@@ -252,10 +279,11 @@ const App = () => {
               options={segmentOptions}
             />
             <Input
-              value={selectedOption.url}
+              value={inputUrl}
               placeholder="输入视频播放地址..."
               className={styles.urlInput}
-              readOnly
+              onChange={handleUrlChange}
+              onPressEnter={handleUrlPressEnter}
             />
           </div>
         </Card>
