@@ -46,12 +46,12 @@ pnpm run build-storybook
 
 ### 核心组件
 
-**ReactjsPlayer** (`src/components/ReactjsPlayer/`) - 播放器核心
+**Player** (`src/components/Player/`) - 播放器核心
 - 基于 Kernel 抽象层，支持多种播放协议
 - 通过 Context 提供视频状态和引用
 - 使用 hooks 管理视频事件和状态
 
-**Kernel 系统** (`src/components/ReactjsPlayer/kernels/`) - 播放内核
+**Kernel 系统** (`src/components/Player/kernels/`) - 播放内核
 - `Kernel.ts` - 抽象基类，定义加载和清理接口
 - `Registry.ts` - 单例注册表，管理可用内核
 - `Factory.tsx` - 内核工厂，根据名称创建内核实例

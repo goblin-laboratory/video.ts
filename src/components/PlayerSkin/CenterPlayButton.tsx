@@ -1,10 +1,10 @@
 import { CaretRightOutlined } from '@ant-design/icons';
 import { useContext } from 'react';
-import ReactjsPlayer from '../ReactjsPlayer';
+import Player from '../Player';
 import SkinCenter from './SkinCenter';
 
 export default function CenterPlayButton() {
-  const { videoRef, state } = useContext(ReactjsPlayer.Context);
+  const { videoRef, state } = useContext(Player.Context);
   const el = videoRef?.current as HTMLVideoElement | null;
 
   const shouldShow = state.paused || state.ended;

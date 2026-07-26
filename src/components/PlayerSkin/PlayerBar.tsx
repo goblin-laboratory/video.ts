@@ -10,7 +10,7 @@ import { useMemoizedFn } from 'ahooks';
 import type { MenuProps } from 'antd';
 import { Dropdown, Slider, Space, Tooltip, Typography } from 'antd';
 import { useContext, useMemo, useState } from 'react';
-import ReactjsPlayer from '../ReactjsPlayer';
+import Player from '../Player';
 
 function formatDuration(ms: number): string {
   const seconds = Math.floor(ms / 1000);
@@ -31,7 +31,7 @@ type PlayerBarProps = {
 };
 
 function PlayerBar({ actions = null, extra = null }: PlayerBarProps) {
-  const { videoRef, state } = useContext(ReactjsPlayer.Context);
+  const { videoRef, state } = useContext(Player.Context);
   const [seekingValue, setSeekingValue] = useState<number | null>(null);
   const el = videoRef?.current as HTMLVideoElement | null;
 

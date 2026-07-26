@@ -90,7 +90,7 @@ pnpm run storybook
 
 ### 核心组件
 
-- **ReactjsPlayer** - 播放器核心，基于 Kernel 抽象层
+- **Player** - 播放器核心，基于 Kernel 抽象层
 - **Kernel 系统** - 播放内核抽象，支持多种协议
 - **PlayerSkin** - 播放器皮肤，分为直播和回放两种模式
 
@@ -99,10 +99,10 @@ pnpm run storybook
 ```
 src/
 ├── components/
-│   ├── ReactjsPlayer/    # 播放器核心
-│   │   └── kernels/      # 播放内核
-│   └── PlayerSkin/       # 播放器皮肤
-└── App.tsx               # 演示应用
+│   ├── Player/           # 播放器核心
+│   │   └── kernels/       # 播放内核
+│   └── PlayerSkin/        # 播放器皮肤
+└── App.tsx                # 演示应用
 ```
 
 ## 提交规范

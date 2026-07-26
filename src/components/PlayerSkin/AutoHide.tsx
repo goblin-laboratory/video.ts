@@ -1,9 +1,9 @@
 import { useDebounceFn, useUpdateEffect } from 'ahooks';
 import { useContext, useState } from 'react';
-import ReactjsPlayer from '../ReactjsPlayer';
+import Player from '../Player';
 
 export function AutoHide({ children }: { children: React.ReactNode }) {
-  const { state } = useContext(ReactjsPlayer.Context);
+  const { state } = useContext(Player.Context);
   const [hidden, setHidden] = useState(false);
   const shouldShow =
     state.loading ||

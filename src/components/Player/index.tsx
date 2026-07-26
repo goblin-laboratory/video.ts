@@ -8,7 +8,7 @@ const PlayerContext = createContext(
   {} as { videoRef: React.RefObject<HTMLVideoElement>; state: Player.State },
 );
 
-function ReactjsPlayer({
+function Player({
   kernel,
   src,
   config,
@@ -19,7 +19,9 @@ function ReactjsPlayer({
   config: unknown;
   children?: React.ReactNode;
 }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(
+    null as unknown as HTMLVideoElement,
+  );
   const state = useVideoState(src);
   useVideoEvent({ videoRef, state });
   useKeyboardShortcuts({ videoRef, enabled: true });
@@ -51,6 +53,6 @@ function ReactjsPlayer({
   );
 }
 
-ReactjsPlayer.Context = PlayerContext;
+Player.Context = PlayerContext;
 
-export default ReactjsPlayer;
+export default Player;

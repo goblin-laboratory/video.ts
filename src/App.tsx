@@ -4,7 +4,7 @@ import { createStyles } from 'antd-style';
 import { useEffect, useState } from 'react';
 import { LivePlayerSkin } from './components/PlayerSkin/LivePlayerSkin';
 import { PlaybackPlayerSkin } from './components/PlayerSkin/PlaybackPlayerSkin';
-import ReactjsPlayer from './components/ReactjsPlayer';
+import Player from './components/Player';
 
 const useStyles = createStyles(({ css }) => ({
   appContainer: css`
@@ -296,7 +296,7 @@ const App = () => {
         >
           <div className={styles.playerWrapper}>
             {selectedOption.url ? (
-              <ReactjsPlayer
+              <Player
                 kernel={selectedOption.kernel}
                 src={selectedOption.url}
                 config={{}}
@@ -306,7 +306,7 @@ const App = () => {
                 ) : (
                   <PlaybackPlayerSkin />
                 )}
-              </ReactjsPlayer>
+              </Player>
             ) : (
               <div className={styles.playerPlaceholder}>
                 <div className={styles.placeholderIcon}>📹</div>

@@ -3,7 +3,7 @@ import { useMemoizedFn } from 'ahooks';
 import { Button, Slider, Space, Tooltip, theme } from 'antd';
 import { createStyles } from 'antd-style';
 import { useContext } from 'react';
-import ReactjsPlayer from '../ReactjsPlayer';
+import Player from '../Player';
 
 const volumeSliderStyles = {
   trackStyle: { backgroundColor: '#fff' },
@@ -17,7 +17,7 @@ type VolumeControlProps = {
 };
 
 export function VolumeControl({ sliderWidth = 100 }: VolumeControlProps) {
-  const { videoRef, state } = useContext(ReactjsPlayer.Context);
+  const { videoRef, state } = useContext(Player.Context);
   const el = videoRef?.current as HTMLVideoElement | null;
 
   const handleVolumeChange = useMemoizedFn((value: number) => {

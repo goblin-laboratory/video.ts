@@ -9,9 +9,9 @@ import type { MenuProps } from 'antd';
 import { Button, Dropdown, Slider, Space, Typography, theme } from 'antd';
 import { createStyles } from 'antd-style';
 import { useContext, useMemo, useState } from 'react';
-import ReactjsPlayer from '../ReactjsPlayer';
-import VolumeControl from './VolumeControl';
+import Player from '../Player';
 import TooltipButton from './TooltipButton';
+import VolumeControl from './VolumeControl';
 
 function formatDuration(ms: number): string {
   const seconds = Math.floor(ms / 1000);
@@ -39,7 +39,7 @@ const progressSliderStyles = {
 };
 
 function PlaybackPlayerBar({ actions = null, extra = null }: PlayerBarProps) {
-  const { videoRef, state } = useContext(ReactjsPlayer.Context);
+  const { videoRef, state } = useContext(Player.Context);
   const [seekingValue, setSeekingValue] = useState<number | null>(null);
   const el = videoRef?.current as HTMLVideoElement | null;
 

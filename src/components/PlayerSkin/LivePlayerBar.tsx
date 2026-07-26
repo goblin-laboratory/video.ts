@@ -8,10 +8,10 @@ import { useMemoizedFn } from 'ahooks';
 import { Space, theme } from 'antd';
 import { createStyles, cx } from 'antd-style';
 import { useContext } from 'react';
-import ReactjsPlayer from '../ReactjsPlayer';
+import Player from '../Player';
 import LiveIndicator from './LiveIndicator';
-import VolumeControl from './VolumeControl';
 import TooltipButton from './TooltipButton';
+import VolumeControl from './VolumeControl';
 
 type PlayerBarProps = {
   actions?: React.ReactNode;
@@ -19,7 +19,7 @@ type PlayerBarProps = {
 };
 
 function LivePlayerBar({ actions = null }: PlayerBarProps) {
-  const { videoRef, state } = useContext(ReactjsPlayer.Context);
+  const { videoRef, state } = useContext(Player.Context);
   const el = videoRef?.current as HTMLVideoElement | null;
 
   const handleTogglePlay = useMemoizedFn(() => {

@@ -1,6 +1,6 @@
 import { Space, theme } from 'antd';
 import { useContext } from 'react';
-import ReactjsPlayer from '../ReactjsPlayer';
+import Player from '../Player';
 
 function formatDuration(ms: number): string {
   const seconds = Math.floor(ms / 1000);
@@ -37,7 +37,7 @@ function LiveIndicator() {
 export default LiveIndicator;
 
 export function LiveElapsed() {
-  const { state } = useContext(ReactjsPlayer.Context);
+  const { state } = useContext(Player.Context);
 
   const elapsedMs = Math.max(0, (state?.currentTime ?? 0) * 1000);
   return <span>{formatDuration(elapsedMs)}</span>;
